@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-"""Extended argument types for argparse
+"""
+Extended argument types for argparse
 """
 
 import argparse
@@ -18,7 +19,8 @@ __status__ = "Development"
 
 
 def int_range(i_min, i_max):
-    """Defines an integer taht is bounded inclusively by i_min and i_max
+    """
+    Defines an integer taht is bounded inclusively by i_min and i_max
 
     Args:
         i_min: :obj:`int` - mininum value the integer argument can have
@@ -39,7 +41,8 @@ def int_range(i_min, i_max):
 
 
 def capped_tuple(mins, maxs):
-    """Defines a tuple of integers, each limited to mins and maxs by setup.
+    """
+    Defines a tuple of integers, each limited to mins and maxs by setup.
 
     Args:
         mins: :obj:`tuple` or :obj:`list` of integers defining the minimum
@@ -74,7 +77,8 @@ def capped_tuple(mins, maxs):
 
 
 def int_list(arg_str):
-    """Defines a list of integers from a comma-delimited string. Used as an
+    """
+    Defines a list of integers from a comma-delimited string. Used as an
     argparse type
 
     Args: None when used as an argparse type
@@ -88,7 +92,8 @@ def int_list(arg_str):
 
 
 def str_list(arg_str):
-    """Defines a list of strings from a comma-delimited string. Used as an
+    """
+    Defines a list of strings from a comma-delimited string. Used as an
     argparse type
 
     Args: None when used as an argparse type
@@ -97,7 +102,8 @@ def str_list(arg_str):
 
 
 def mix_int_list(arg_str):
-    """Defines a list of integers from a string of comma-delimited mixed list
+    """
+    Defines a list of integers from a string of comma-delimited mixed list
     of integers and integer ranges. Example: '2;3:6;8' -> [2,3,4,5,6,8]
 
     Args: None when used an as argparse type
@@ -124,4 +130,7 @@ def mix_int_list(arg_str):
 
 
 def unescaped_str(arg_str):
+    """
+    Defines an unescaped string to be used with argparse
+    """
     return codecs.decode(str(arg_str), 'unicode_escape')

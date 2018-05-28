@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-"""A modified argparse ArgumentParser with a detailed help function for
+"""
+A modified argparse ArgumentParser with a detailed help function for
 printing global help + each subparser's help together as one help output.
 Aliases for subparsers are supported.
 
@@ -101,7 +102,8 @@ class _DetailedHelpAction(argparse._HelpAction):
 
 
 class ParserWithDetailedHelp(argparse.ArgumentParser):
-    """A subclass of argparse.ArgumentParser to provide new print_help function
+    """
+    A subclass of argparse.ArgumentParser to provide new print_help function
     with more detail than the argparse's built-in print_help function
     """
     def __init__(self, *args, **kwargs):
@@ -110,7 +112,8 @@ class ParserWithDetailedHelp(argparse.ArgumentParser):
         self.sub_aliases = {}
 
     def print_detailed_help(self, selected_subs):
-        """For arguments parsers with SubParsersAction, this detailed help
+        """
+        For arguments parsers with SubParsersAction, this detailed help
         function, prints each subparser's help separately. Aliases are handled
         through helper class _DetailedHelpAction's extra selected_subs
         argument. A typical call to add_argument for this type of action is:

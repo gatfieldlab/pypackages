@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-"""Specialized cached objects for efficient computation of memory intentive
+"""
+Specialized cached objects for efficient computation of memory intensive
 data structures
 """
 
@@ -15,7 +16,8 @@ __status__ = "Development"
 
 
 class CappedDictWithProducer(dict):
-    """A specialized subslass of dict with a size cap and a producer function.
+    """
+    A specialized subslass of dict with a size cap and a producer function.
     Dictionary grows until cap is reached. Then values are fed from the
     generator function. Before the cap is reached, if a previous unset key is
     requested, again a callback to generator function is used.

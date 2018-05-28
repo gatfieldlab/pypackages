@@ -10,6 +10,6 @@ setup(
     author_email='bulak.arpat@gmail.com',
     license='GPLv3',
     packages=find_packages(),
-    install_requires=[],
+    install_requires=["colour"],
     zip_safe=False
 )

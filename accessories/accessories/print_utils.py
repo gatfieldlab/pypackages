@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-"""Simple methods to pretty and functional printing various data types"""
+"""
+Simple methods to pretty and functional printing various data types
+"""
 
 
 __author__ = "Bulak Arpat"
@@ -14,7 +16,8 @@ __status__ = "Development"
 
 
 def pretty_list(lst, max_len=6):
-    """Prettify the string representation of a long list by presenting few
+    """
+    Prettify the string representation of a long list by presenting few
     values from the beginning and ending and putting ... in the middle without
     commas:
     [1, 2, 3, 4, 5, 6, 7] ->  '[ 1 2 3 ... 5 6 7]'
@@ -39,7 +42,8 @@ def pretty_list(lst, max_len=6):
 
 
 def pretty_dict(dic):
-    """Prettify the string representation of a dictionary:
+    """
+    Prettify the string representation of a dictionary:
     {'c': 39, 'ded': 2, 'aa': 21} -> '{ aa: 21, c: 39, ded: 2,}'
 
     Arg: :obj:`dict` to be prettified

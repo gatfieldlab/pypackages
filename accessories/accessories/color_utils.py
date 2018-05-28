@@ -1,19 +1,32 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Created on Wed Dec 16 11:12:04 2014
 
-@author: barpat
+
 """
+Accessory functions for easy and smoothed gradient palettes
+"""
+
 
 from colour import Color
-#import brewer2mpl
+
+
+__author__ = "Bulak Arpat"
+__copyright__ = "Copyright 2017, Bulak Arpat"
+__license__ = "GPLv3"
+__version__ = "0.1.0"
+__maintainer__ = "Bulak Arpat"
+__email__ = "Bulak.Arpat@unil.ch"
+__status__ = "Development"
+
 
 try:
   basestring
 except NameError:
   basestring = str
 
-PALETTE_TYPES = ('quantitative', 'qualitative', 'sequential', 'diverging', 'unknown')
+PALETTE_TYPES = ('quantitative', 'qualitative', 'sequential',
+                 'diverging', 'unknown')
+
 
 class Palette(object):
     '''
@@ -58,10 +71,14 @@ class Palette(object):
     def __str__(self):
         return "{}".format(self.name)
     def __repr__(self):
-        return "<Palette {} ('{}', {} colors)>".format(self.name, self.pal_type, self.ncols)
+        return "<Palette {} ('{}', {} colors)>".format(
+            self.name, self.pal_type, self.ncols)
+
 
 class color_gradient():
-    ''' A class to conveniently return color gradients '''
+    """
+    A class to conveniently return color gradients
+    """
     valid_gradients = ('linear1', 'linear2', 'bezier')
     valid_returns = ('hex')
     def __init__(self, color_s, gradient_type='linear1', return_type='hex'):
@@ -105,6 +122,8 @@ class color_gradient():
             cur_gradient = bezier_gradient(self.edge_colors, n)
         if self.return_type == 'hex':
             return [c.hex_l for c in cur_gradient]
+
+
 def colorize(color):
     if isinstance(color, Color):
         return color
@@ -117,9 +136,12 @@ def colorize(color):
             return Color(rgb=color[:3])
     raise TypeError("'{}' type can't be colorized.".format(type(color).__name__))
 
+
 def linear_gradient1(init_color, finish_color=Color('black'), n=10):
-    ''' returns a gradient list of (n) colors between two Color objects.
-        Based on Ben Southgate's function on http://bsou.io/p/3 '''
+    """
+    Returns a gradient list of (n) colors between two Color objects.
+    Based on Ben Southgate's function on http://bsou.io/p/3
+    """
     # Starting and ending colors in RGB form
     s = init_color.rgb
     f = finish_color.rgb
@@ -134,46 +156,58 @@ def linear_gradient1(init_color, finish_color=Color('black'), n=10):
         RGB_list.append(curr_vector)
     return [Color(rgb=rgb) for rgb in RGB_list]
 
+
 def linear_gradient2(init_color, finish_color=Color('black'), n=10):
-    ''' returns a gradient list of (n) colors between two Color objects.
-        Based on 'colour' module's internal range_to function '''
+    """
+    Returns a gradient list of (n) colors between two Color objects.
+    Based on 'colour' module's internal range_to function
+    """
     return init_color.range_to(finish_color, n)
 
-fact_cache = {}
+
+FACT_CACHE = {}
 def fact(n):
-    ''' Memoized factorial function '''
+    """
+    Memoized factorial function
+    """
     try:
-        return fact_cache[n]
+        return FACT_CACHE[n]
     except(KeyError):
         if n == 1 or n == 0:
             result = 1
         else:
             result = n*fact(n-1)
-        fact_cache[n] = result
+        FACT_CACHE[n] = result
         return result
 
 
-def bernstein(t,n,i):
-    ''' Bernstein coefficient '''
+def bernstein(t, n, i):
+    """
+    Bernstein coefficient
+    """
     binom = fact(n)/float(fact(i)*fact(n - i))
     return binom*((1-t)**(n-i))*(t**i)
 
 
 def bezier_gradient(colors, num_out=100):
-    ''' Returns a "bezier gradient" dictionary using a given list of
-        colors as control points. Based on Ben Southgate's function
-        on http://bsou.io/p/3'''
+    """
+    Returns a "bezier gradient" dictionary using a given list of
+    colors as control points. Based on Ben Southgate's function
+    on http://bsou.io/p/3
+    """
     # RGB vectors for each color, use as control points
     RGB_list = [color.rgb for color in colors]
     n = len(RGB_list) - 1
 
     def bezier_interp(t):
-        ''' Define an interpolation function for this specific curve'''
+        """
+        Defines an interpolation function for this specific curve
+        """
         # List of all summands
         summands = [ list(map(lambda x: bernstein(t,n,i)*x, c))
                      for i, c in enumerate(RGB_list)]
         # Output color
-        out = [0.0,0.0,0.0]
+        out = [0.0, 0.0, 0.0]
         # Add components of each summand together
         for vector in summands:
             for c in range(3):

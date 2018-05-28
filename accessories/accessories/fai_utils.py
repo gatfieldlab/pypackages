@@ -1,11 +1,19 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Tue Aug  5 11:16:15 2014
 
-@author: barpat
 """
+Utilities to work with indexed fasta files (.fa + .fai)
+Does not depend on third party packages.
+"""
+
 import math
 
+__author__ = "Bulak Arpat"
+__copyright__ = "Copyright 2017, Bulak Arpat"
+__license__ = "GPLv3"
+__version__ = "0.1.0"
+__maintainer__ = "Bulak Arpat"
+__email__ = "Bulak.Arpat@unil.ch"
+__status__ = "Development"
 
 
 class IndexedFasta:
@@ -78,4 +86,3 @@ class IndexedFasta:
             fai_info = self.parse_fai_line(line)
             seq = self.get_seq(fai_info)
             yield (fai_info[self.GeneID], seq)
-        

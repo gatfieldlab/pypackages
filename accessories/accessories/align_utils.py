@@ -5,17 +5,24 @@ acessories/align_utils
 This module hosts several utility functions
 to help processing sequence alignmnets,
 particularly from a SAM, i.e CIGAR and MD-tags.
-
-Created on Thu Jul 18 15:07:42 2013
-@author: Bulak Arpat, bulak.arpat@unil.ch
-
 """
 
-from re import compile
+
+import re
+
+
+__author__ = "Bulak Arpat"
+__copyright__ = "Copyright 2017, Bulak Arpat"
+__license__ = "GPLv3"
+__version__ = "0.1.0"
+__maintainer__ = "Bulak Arpat"
+__email__ = "Bulak.Arpat@unil.ch"
+__status__ = "Development"
+
 
 # Compiled regex
-MD_REGEX = compile('([0-9]+|[A-Z]+|\^[A-Z]+)')
-CIGAR_REGEX = compile('[0-9]+[MIDNSHP=X]')
+MD_REGEX = re.compile(r'([0-9]+|[A-Z]+|\^[A-Z]+)')
+CIGAR_REGEX = re.compile(r'[0-9]+[MIDNSHP=X]')
 
 # Function to replace/insert str in str
 def str_mod(string, pos, insert, replace=False):

@@ -6,9 +6,7 @@
 Accessory functions for easy and smoothed gradient palettes
 """
 
-
 from colour import Color
-
 
 __author__ = "Bulak Arpat"
 __copyright__ = "Copyright 2017, Bulak Arpat"
@@ -27,6 +25,7 @@ except NameError:
 PALETTE_TYPES = ('quantitative', 'qualitative', 'sequential',
                  'diverging', 'unknown')
 
+# TODO: i) Refactor code, ii) Provide Palette versions for gradients
 
 class Palette(object):
     '''

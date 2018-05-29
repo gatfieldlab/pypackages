@@ -108,7 +108,9 @@ class ProgressBar:
     def finish(self, final_progress):
         """
         Finishes the progress bar with the final value of the progress and
-        makes a new line
+        makes a new line. The final_progress does not to be equal to workload.
+        This is intentional; in cases where a download breaks before the
+        whole file is downloaded, the final progress will indicate this.
 
         Args:
             final_progress: :obj:`int` final value of progress
@@ -122,8 +124,8 @@ def example():
     """
     This function illustrates the use the of the ProgressBar class
     """
-    # Our total work is worth 183932840 apples
-    workload = 183932840
+    # Our total work is worth 1839328401 apples
+    workload = 1839328401
     # We start with 0 apples and progress in steps of 1024 apples
     cur_progress = 0
     progress_step = 1024

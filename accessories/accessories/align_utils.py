@@ -5,6 +5,26 @@ Provides several utility functions to help processing sequence alignmnets
 
 In articular, it facilitates parsing, converting and printing alignments from
 structures obtained from a SAM file, i.e CIGAR and MD-tags.
+
+From SAM specification:
+
+Op  Description
+‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+M   alignment match (can be a sequence match or mismatch)
+I   insertion to the reference
+D   deletion from the reference
+N   skipped region from the reference
+S   soft clipping (clipped sequences present in SEQ)
+H   hard clipping (clipped sequences NOT present in SEQ)
+P   padding (silent deletion from padded reference)
+=   sequence match
+X   sequence mismatch
+
+• H can only be present as the first and/or last operation.
+• S may only have H operations between them and the ends of the string.
+• For mRNA-to-genome alignment, an N operation represents an intron.
+  For other types of alignments, the interpretation of N is not defined.
+• Sum of the lengths of the M/I/S/=/X operations shall equal the length of SEQ.
 """
 
 
@@ -158,11 +178,13 @@ def assert_aln(read_seq, cigar, md_tag):
                 md_dels.remove(cigar_del)
         elif operant in ('I', 'S'):
             cigar_len += op_len
-        elif operant != 'H':
+        elif operant not in ('H', 'N'):
             cigar_len += op_len
             cigar_len2 += op_len
         if operant == 'I':
             mod_cigar.append((cigar_len2, operant, op_len))
+    print("Seq len: {}\nCigar Len: {}\nMD len: {}\nCigar Len2: {}\nis_ok: {}".format(
+        len(read_seq), cigar_len, md_len, cigar_len2, is_ok))
     if md_dels or not (cigar_len2 == md_len and cigar_len == len(read_seq)):
         is_ok = False
     if is_ok:
@@ -276,6 +298,14 @@ def sam2gapped(read_seq, cigar, md_tag):
         if cigar_op in ('I', 'S'):
             ref_seq = str_mod(ref_seq, cur_pos, '-'*op_len, replace=True)
             pairwise = str_mod(pairwise, cur_pos, ' '*op_len, replace=True)
-        if not cigar_op in ('N', 'H', 'P'):
+    # Let the user define how N's should be printed:
+    # 1 - Like here: all N's converted into N in ref and - in read (full)
+    # 2 - Like before: skip all N operations as if they don't exist (skip)
+    # 3 - New: Insert a short tag like [76N] in ref and - in read (short)
+        if cigar_op == 'N':
+            ref_seq = str_mod(ref_seq, cur_pos, 'N'*op_len)
+            pairwise = str_mod(pairwise, cur_pos, ' '*op_len)
+            read_seq = str_mod(read_seq, cur_pos, '-'*op_len)
+        if not cigar_op in ('H', 'P'):
             cur_pos += op_len
     return '\n'.join([ref_seq, pairwise, read_seq])

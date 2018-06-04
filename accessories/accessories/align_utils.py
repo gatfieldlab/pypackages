@@ -183,8 +183,8 @@ def assert_aln(read_seq, cigar, md_tag):
             cigar_len2 += op_len
         if operant == 'I':
             mod_cigar.append((cigar_len2, operant, op_len))
-    print("Seq len: {}\nCigar Len: {}\nMD len: {}\nCigar Len2: {}\nis_ok: {}".format(
-        len(read_seq), cigar_len, md_len, cigar_len2, is_ok))
+    # print("Seq len: {}\nCigar Len: {}\nMD len: {}\nCigar Len2: {}\nis_ok: {}".format(
+    #     len(read_seq), cigar_len, md_len, cigar_len2, is_ok))
     if md_dels or not (cigar_len2 == md_len and cigar_len == len(read_seq)):
         is_ok = False
     if is_ok:
@@ -241,7 +241,7 @@ def edit_dist_range(cigar, md_tag):
 
 
 # Function to convert a CIGAR and MD tag to a gapped alignment
-def sam2gapped(read_seq, cigar, md_tag):
+def sam2gapped(read_seq, cigar, md_tag, skip_mode="skip"):
     """
     This function takes the read sequence, CIGAR and MD tag
     as inputs and produces a gapped alignment of the read sequence
@@ -272,7 +272,6 @@ def sam2gapped(read_seq, cigar, md_tag):
             soft_pos += cigar_ops[i][1]
     cur_pos = soft_pos
     for md_op in md_ops:
-        #print cur_pos, md_op
         while mod_cigar and mod_cigar[0][0] <= cur_pos - soft_pos:
             insertion = mod_cigar.pop(0)
             cur_pos += insertion[2]
@@ -298,14 +297,22 @@ def sam2gapped(read_seq, cigar, md_tag):
         if cigar_op in ('I', 'S'):
             ref_seq = str_mod(ref_seq, cur_pos, '-'*op_len, replace=True)
             pairwise = str_mod(pairwise, cur_pos, ' '*op_len, replace=True)
-    # Let the user define how N's should be printed:
-    # 1 - Like here: all N's converted into N in ref and - in read (full)
-    # 2 - Like before: skip all N operations as if they don't exist (skip)
-    # 3 - New: Insert a short tag like [76N] in ref and - in read (short)
         if cigar_op == 'N':
-            ref_seq = str_mod(ref_seq, cur_pos, 'N'*op_len)
-            pairwise = str_mod(pairwise, cur_pos, ' '*op_len)
-            read_seq = str_mod(read_seq, cur_pos, '-'*op_len)
+            if skip_mode == 'full':
+                insert = 'N' * op_len
+            elif skip_mode == 'skip':
+                insert = ''
+                op_len = 0
+            elif skip_mode == 'short':
+                insert = '[' + str(op_len) + 'N]'
+                op_len = len(insert)
+            else:
+                raise Exception("skip_mode not known")
+            ref_seq = str_mod(ref_seq, cur_pos, insert)
+            pairwise = str_mod(pairwise, cur_pos, ' ' * op_len)
+            read_seq = str_mod(read_seq, cur_pos, '-' * op_len)
         if not cigar_op in ('H', 'P'):
             cur_pos += op_len
-    return '\n'.join([ref_seq, pairwise, read_seq])
+    return '\n'.join(['ref     ' + ref_seq,
+                      'aln     ' + pairwise,
+                      'read    ' + read_seq])

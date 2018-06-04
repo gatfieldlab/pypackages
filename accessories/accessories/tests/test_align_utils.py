@@ -75,3 +75,21 @@ class TestStrMod(TestCase):
         """
         res = align_utils.str_mod(self.string, 12, self.insert1, replace=True)
         self.assertEqual(res, "ABCDEFghijklmn")
+
+class TestCigarMD(TestCase):
+    """
+
+    Base class for unit tests for CIGAR and MD parsing functions
+
+    """
+    def setUp(self):
+        self.valid_triples = [
+            ("AAACTCAGATCCATCGGTTTTCCATCTTGGTCAGGGTATCTACCATAGAAGAA",
+             "3S6M100N8M1D12M10N12M12S", "14^T24"),
+            ("CCTTATCCACCTTCCGCTTTACAGCCTCAATGGCGGGAGCATCTGTTGAG",
+             "4S38M12N8M", "4C40T"),
+            ("TACTTTTGAGAGTTACAACTTGATATATTTTATCCTGAATATGGTTTCGCAATTGAAGTGCAAGAAGAACAGCATGGAAAAATATATAGAATT",
+             "11S63M1I8M3I7M", "24A14G2C3A6G9C14"),
+            ("", "", ""),
+            ("", "", ""),
+            ("", "", "")]

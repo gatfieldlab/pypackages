@@ -146,7 +146,8 @@ def colorize(color):
 def linear_gradient1(init_color, finish_color=Color('black'), num_col=10):
     """
     Returns a gradient list of (n) colors between two Color objects.
-    Based on Ben Southgate's function on http://bsou.io/p/3
+    Based on Ben Southgate's function on 
+    https://bsou.io/posts/color-gradients-with-python
     """
     # Starting and ending colors in RGB form
     start = init_color.rgb
@@ -198,8 +199,8 @@ def bernstein(frac, num, inx):
 def bezier_gradient(colors, num_out=100):
     """
     Returns a "bezier gradient" dictionary using a given list of
-    colors as control points. Based on Ben Southgate's function
-    on http://bsou.io/p/3
+    colors as control points. Based on Ben Southgate's function on
+    https://bsou.io/posts/color-gradients-with-python
     """
     # RGB vectors for each color, use as control points
     rgb_list = [color.rgb for color in colors]

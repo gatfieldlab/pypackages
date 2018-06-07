@@ -14,5 +14,6 @@ setup(
         'console_scripts': ['region = genomics.region:main']
     },
     install_requires=['numpy'],
+    dependency_links=['http://github.com/gatfieldlab/pypackages#egg=extended&subdirectory=extended'],
     zip_safe=False
 )

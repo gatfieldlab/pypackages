@@ -29,7 +29,7 @@ REGION_PATTERN = (r'^((?P<region>{region})|'
                   r'(?P<number>\d+)|'
                   r'(?P<star>(?P<pre>\*)?(?=({region}))'
                   r'({region})(?(pre)|\*?))(?P<op>[\+\-])'
-                  r'(?P<offset>\d+))$'.format(region='|'.join(REGIONS)))
+                  r'(?P<offset>\d+%?))$'.format(region='|'.join(REGIONS)))
 REGION_MATCH = re.compile(REGION_PATTERN)
 OPS = {'+': operator.add, '-': operator.sub}
 
@@ -85,9 +85,16 @@ class Region(object):
         limits = []
         for sentence in self.parse_words:
             limits.append([])
+            cur_word_limits = None
             for word in sentence:
                 if word.isdigit():
                     limits[-1].append(int(word))
+                elif word[-1] == '%' and word[:-1].isdigit():
+                    if not cur_word_limits:
+                        raise RegionException(
+                            'Fatal error during % calc: {}'.format(sentence))
+                    limits[-1].append((cur_word_limits[1] -
+                                       cur_word_limits[0]) // 100 * int(word[:-1]))
                 elif word in ['+', '-']:
                     limits[-1].append(word)
                 else:
@@ -104,6 +111,7 @@ class Region(object):
                         word_limits = (tr_info[CDS_END], tr_info[TR_LEN])
                     elif word == 'transcript':
                         word_limits = (0, tr_info[TR_LEN])
+                    cur_word_limits = word_limits
                     if left:
                         limits[-1].append(word_limits[0])
                     if right:

@@ -5,9 +5,9 @@ name = "pypi"
 
 [packages]
 numpy = "*"
+specialized = {git = "https://github.com/gatfieldlab/pypackages", editable = true, subdirectory = "specialized"}
 
 [dev-packages]
-genomics = {path = ".", editable = true}
 "e1839a8" = {path = ".", editable = true}
 
 [requires]

@@ -23,7 +23,7 @@ GQUAD_LETTERS = ["N", "G"]
 #                ["".join(word) for word in itertools.product(
 #                   GQUAD_LETTERS, repeat=3)]}
 
-# GNG is intentially undefined. We should never come across this key
+# NGN is intentially undefined. We should never come across this key
 # if we do it must be an error
 GQUAD_TABLE = {
     "GGG": "G",
@@ -31,5 +31,6 @@ GQUAD_TABLE = {
     "GNN": "G",
     "NNN": "N",
     "NNG": "G",
-    "NGG": "G"
+    "NGG": "G",
+    "GNG": "G"
 }

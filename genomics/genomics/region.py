@@ -17,14 +17,15 @@ from genomics import utils
 __author__ = "Bulak Arpat"
 __copyright__ = "Copyright 2017, Bulak Arpat"
 __license__ = "GPLv3"
-__version__ = "0.2.1"
+__version__ = "0.2.2"
 __maintainer__ = "Bulak Arpat"
 __email__ = "Bulak.Arpat@unil.ch"
 __status__ = "Development"
 
 
-REGIONS = ('5utr', 'cds', '3utr', 'transcript')
+REGIONS = ('5utr', 'cds', '3utr', 'transcript', 'custom')
 CDS_START, CDS_END, TR_LEN = range(3)
+BOX_START, BOX_END = range(2)
 REGION_PATTERN = (r'^((?P<region>{region})|'
                   r'(?P<number>\d+)|'
                   r'(?P<star>(?P<pre>\*)?(?=({region}))'
@@ -38,6 +39,7 @@ class RegionException(Exception):
     """
     A simple class for all exceptions from region.py
     """
+
     def __init__(self, m):
         message = "[calc_codon] {}".format(m)
         super(RegionException, self).__init__(message)
@@ -57,6 +59,7 @@ class Region(object):
     *transcript+10:transcript*-10 = [10, transcript_end-10)
     10:3utr*+10 = [10, 3utr_end-10) = [10, transcript_end-10)
     """
+
     def __init__(self, region):
         self.parse_words = []
         parsed_regions = region.split(":")
@@ -78,7 +81,8 @@ class Region(object):
 
     def get_limits(self, tr_info, enforce=False):
         """
-        Given a tr_info tuple (CDS_START, CDS_END, TR_LEN), calculates the
+        Given a tr_info tuple (CDS_START, CDS_END, TR_LEN), or similarly
+        (BOX_START, BOX_END, TR_LEN), calculates the
         limits of for the Region instance. The limits are 0-based , half closed
         intervals [start, end).
         """
@@ -107,6 +111,8 @@ class Region(object):
                         word_limits = (0, tr_info[CDS_START])
                     elif word == 'cds':
                         word_limits = (tr_info[CDS_START], tr_info[CDS_END])
+                    elif word == 'custom':
+                        word_limits = (tr_info[BOX_START], tr_info[BOX_END])
                     elif word == '3utr':
                         word_limits = (tr_info[CDS_END], tr_info[TR_LEN])
                     elif word == 'transcript':
